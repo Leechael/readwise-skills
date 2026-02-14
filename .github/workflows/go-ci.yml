@@ -26,4 +26,4 @@ jobs:
         run: go test ./... -count=1 -race
 
       - name: Build
-        run: go build ./cmd/readwise
+        run: go build -o bin/readwise-cli ./cmd/readwise

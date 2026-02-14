@@ -36,14 +36,14 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
         run: |
           mkdir -p dist
-          go build -ldflags="-s -w" -o dist/readwise ./cmd/readwise
-          tar -czf dist/readwise-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz -C dist readwise
+          go build -ldflags="-s -w" -o dist/readwise-cli ./cmd/readwise
+          tar -czf dist/readwise-cli-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz -C dist readwise-cli
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: readwise-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: dist/readwise-*.tar.gz
+          name: readwise-cli-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/readwise-cli-*.tar.gz
 
   publish:
     needs: release
@@ -57,5 +57,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/readwise-*.tar.gz
+          files: artifacts/readwise-cli-*.tar.gz
           generate_release_notes: true
