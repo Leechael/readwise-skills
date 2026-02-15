@@ -84,14 +84,14 @@ func newHighlightGetCmd() *cobra.Command {
 
 func newHighlightCreateCmd() *cobra.Command {
 	var (
-		text         string
-		title        string
-		author       string
-		sourceURL    string
-		sourceType   string
-		category     string
-		note         string
-		fromStdin    bool
+		text       string
+		title      string
+		author     string
+		sourceURL  string
+		sourceType string
+		category   string
+		note       string
+		fromStdin  bool
 	)
 
 	cmd := &cobra.Command{

@@ -42,18 +42,18 @@ type HighlightCreateRequest struct {
 
 // HighlightCreateItem is a single highlight to create.
 type HighlightCreateItem struct {
-	Text         string  `json:"text"`
-	Title        string  `json:"title,omitempty"`
-	Author       string  `json:"author,omitempty"`
-	ImageURL     string  `json:"image_url,omitempty"`
-	SourceURL    string  `json:"source_url,omitempty"`
-	SourceType   string  `json:"source_type,omitempty"`
-	Category     string  `json:"category,omitempty"`
-	Note         string  `json:"note,omitempty"`
-	Location     *int    `json:"location,omitempty"`
-	LocationType string  `json:"location_type,omitempty"`
+	Text          string `json:"text"`
+	Title         string `json:"title,omitempty"`
+	Author        string `json:"author,omitempty"`
+	ImageURL      string `json:"image_url,omitempty"`
+	SourceURL     string `json:"source_url,omitempty"`
+	SourceType    string `json:"source_type,omitempty"`
+	Category      string `json:"category,omitempty"`
+	Note          string `json:"note,omitempty"`
+	Location      *int   `json:"location,omitempty"`
+	LocationType  string `json:"location_type,omitempty"`
 	HighlightedAt string `json:"highlighted_at,omitempty"`
-	HighlightURL string  `json:"highlight_url,omitempty"`
+	HighlightURL  string `json:"highlight_url,omitempty"`
 }
 
 // HighlightUpdateRequest is the request body for updating a highlight.
@@ -111,22 +111,22 @@ type ExportResponse struct {
 
 // ExportResult is a single book with its highlights from the export endpoint.
 type ExportResult struct {
-	UserBookID    int              `json:"user_book_id"`
-	IsDeleted     bool             `json:"is_deleted"`
-	Title         string           `json:"title"`
-	Author        string           `json:"author"`
-	ReadableTitle string           `json:"readable_title"`
-	Source        string           `json:"source"`
-	CoverImageURL string           `json:"cover_image_url"`
-	UniqueURL     string           `json:"unique_url"`
-	BookTags      []Tag            `json:"book_tags"`
-	Category      string           `json:"category"`
-	DocumentNote  string           `json:"document_note"`
-	Summary       string           `json:"summary"`
-	ReadwiseURL   string           `json:"readwise_url"`
-	SourceURL     string           `json:"source_url"`
-	ExternalID    *string          `json:"external_id"`
-	ASIN          *string          `json:"asin"`
+	UserBookID    int               `json:"user_book_id"`
+	IsDeleted     bool              `json:"is_deleted"`
+	Title         string            `json:"title"`
+	Author        string            `json:"author"`
+	ReadableTitle string            `json:"readable_title"`
+	Source        string            `json:"source"`
+	CoverImageURL string            `json:"cover_image_url"`
+	UniqueURL     string            `json:"unique_url"`
+	BookTags      []Tag             `json:"book_tags"`
+	Category      string            `json:"category"`
+	DocumentNote  string            `json:"document_note"`
+	Summary       string            `json:"summary"`
+	ReadwiseURL   string            `json:"readwise_url"`
+	SourceURL     string            `json:"source_url"`
+	ExternalID    *string           `json:"external_id"`
+	ASIN          *string           `json:"asin"`
 	Highlights    []ExportHighlight `json:"highlights"`
 }
 

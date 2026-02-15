@@ -52,17 +52,17 @@ func newReaderListCmd() *cobra.Command {
 
 func newReaderSaveCmd() *cobra.Command {
 	var (
-		url       string
-		html      string
-		title     string
-		author    string
-		summary   string
-		imageURL  string
-		location  string
-		category  string
+		url        string
+		html       string
+		title      string
+		author     string
+		summary    string
+		imageURL   string
+		location   string
+		category   string
 		savedUsing string
-		notes     string
-		tags      []string
+		notes      string
+		tags       []string
 	)
 
 	cmd := &cobra.Command{

@@ -9,11 +9,11 @@ import (
 
 // ReaderListParams are query parameters for listing Reader documents.
 type ReaderListParams struct {
-	ID         string
-	Category   string
-	Location   string
+	ID           string
+	Category     string
+	Location     string
 	UpdatedAfter string
-	PageCursor string
+	PageCursor   string
 }
 
 func (p ReaderListParams) encode() string {

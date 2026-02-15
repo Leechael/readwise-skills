@@ -37,19 +37,19 @@ type Document struct {
 
 // DocumentSaveRequest is the request body for saving a document to Reader.
 type DocumentSaveRequest struct {
-	URL          string `json:"url"`
-	HTML         string `json:"html,omitempty"`
-	ShouldClean  *bool  `json:"should_clean_html,omitempty"`
-	Title        string `json:"title,omitempty"`
-	Author       string `json:"author,omitempty"`
-	Summary      string `json:"summary,omitempty"`
-	PublishedDate string `json:"published_date,omitempty"`
-	ImageURL     string `json:"image_url,omitempty"`
-	Location     string `json:"location,omitempty"`
-	Category     string `json:"category,omitempty"`
-	SavedUsing   string `json:"saved_using,omitempty"`
-	Tags         []string `json:"tags,omitempty"`
-	Notes        string `json:"notes,omitempty"`
+	URL           string   `json:"url"`
+	HTML          string   `json:"html,omitempty"`
+	ShouldClean   *bool    `json:"should_clean_html,omitempty"`
+	Title         string   `json:"title,omitempty"`
+	Author        string   `json:"author,omitempty"`
+	Summary       string   `json:"summary,omitempty"`
+	PublishedDate string   `json:"published_date,omitempty"`
+	ImageURL      string   `json:"image_url,omitempty"`
+	Location      string   `json:"location,omitempty"`
+	Category      string   `json:"category,omitempty"`
+	SavedUsing    string   `json:"saved_using,omitempty"`
+	Tags          []string `json:"tags,omitempty"`
+	Notes         string   `json:"notes,omitempty"`
 }
 
 // DocumentSaveResponse is the response from saving a document.
