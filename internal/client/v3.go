@@ -9,11 +9,15 @@ import (
 
 // ReaderListParams are query parameters for listing Reader documents.
 type ReaderListParams struct {
-	ID           string
-	Category     string
-	Location     string
-	UpdatedAfter string
-	PageCursor   string
+	ID               string
+	Category         string
+	Location         string
+	UpdatedAfter     string
+	PageCursor       string
+	Tags             []string
+	Limit            int
+	WithHtmlContent  bool
+	WithRawSourceUrl bool
 }
 
 func (p ReaderListParams) encode() string {
@@ -32,6 +36,18 @@ func (p ReaderListParams) encode() string {
 	}
 	if p.PageCursor != "" {
 		v.Set("pageCursor", p.PageCursor)
+	}
+	for _, t := range p.Tags {
+		v.Add("tag", t)
+	}
+	if p.Limit > 0 {
+		v.Set("limit", fmt.Sprintf("%d", p.Limit))
+	}
+	if p.WithHtmlContent {
+		v.Set("withHtmlContent", "true")
+	}
+	if p.WithRawSourceUrl {
+		v.Set("withRawSourceUrl", "true")
 	}
 	if encoded := v.Encode(); encoded != "" {
 		return "?" + encoded

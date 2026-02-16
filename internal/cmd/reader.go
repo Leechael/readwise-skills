@@ -26,8 +26,9 @@ func newReaderListCmd() *cobra.Command {
 	var params client.ReaderListParams
 
 	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List Reader documents",
+		Use:     "list",
+		Aliases: []string{"ls"},
+		Short:   "List Reader documents",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := getClient()
 			if err != nil {
@@ -42,27 +43,33 @@ func newReaderListCmd() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&params.ID, "id", "", "Filter by document ID")
-	cmd.Flags().StringVar(&params.Category, "category", "", "Filter by category")
-	cmd.Flags().StringVar(&params.Location, "location", "", "Filter by location (new|later|archive|feed)")
+	cmd.Flags().StringVar(&params.Category, "category", "", "Filter by category (article|email|rss|highlight|note|pdf|epub|tweet|video)")
+	cmd.Flags().StringVar(&params.Location, "location", "", "Filter by location (new|later|shortlist|archive|feed)")
 	cmd.Flags().StringVar(&params.UpdatedAfter, "updated-after", "", "Filter by updated after (ISO 8601)")
 	cmd.Flags().StringVar(&params.PageCursor, "cursor", "", "Pagination cursor")
+	cmd.Flags().StringSliceVar(&params.Tags, "tag", nil, "Filter by tag (up to 5, empty value for untagged)")
+	cmd.Flags().IntVar(&params.Limit, "limit", 0, "Max documents per response (1-100, default 100)")
+	cmd.Flags().BoolVar(&params.WithHtmlContent, "with-html-content", false, "Include full HTML content in response")
+	cmd.Flags().BoolVar(&params.WithRawSourceUrl, "with-raw-source-url", false, "Include S3 download link for raw source")
 
 	return cmd
 }
 
 func newReaderSaveCmd() *cobra.Command {
 	var (
-		url        string
-		html       string
-		title      string
-		author     string
-		summary    string
-		imageURL   string
-		location   string
-		category   string
-		savedUsing string
-		notes      string
-		tags       []string
+		url           string
+		html          string
+		shouldClean   bool
+		title         string
+		author        string
+		summary       string
+		publishedDate string
+		imageURL      string
+		location      string
+		category      string
+		savedUsing    string
+		notes         string
+		tags          []string
 	)
 
 	cmd := &cobra.Command{
@@ -75,17 +82,21 @@ func newReaderSaveCmd() *cobra.Command {
 			}
 
 			req := model.DocumentSaveRequest{
-				URL:        url,
-				HTML:       html,
-				Title:      title,
-				Author:     author,
-				Summary:    summary,
-				ImageURL:   imageURL,
-				Location:   location,
-				Category:   category,
-				SavedUsing: savedUsing,
-				Notes:      notes,
-				Tags:       tags,
+				URL:           url,
+				HTML:          html,
+				Title:         title,
+				Author:        author,
+				Summary:       summary,
+				PublishedDate: publishedDate,
+				ImageURL:      imageURL,
+				Location:      location,
+				Category:      category,
+				SavedUsing:    savedUsing,
+				Notes:         notes,
+				Tags:          tags,
+			}
+			if cmd.Flags().Changed("should-clean-html") {
+				req.ShouldClean = &shouldClean
 			}
 
 			result, err := c.ReaderSave(req)
@@ -99,9 +110,11 @@ func newReaderSaveCmd() *cobra.Command {
 	cmd.Flags().StringVar(&url, "url", "", "URL to save")
 	cmd.MarkFlagRequired("url")
 	cmd.Flags().StringVar(&html, "html", "", "HTML content (optional)")
+	cmd.Flags().BoolVar(&shouldClean, "should-clean-html", false, "Clean HTML content")
 	cmd.Flags().StringVar(&title, "title", "", "Document title")
 	cmd.Flags().StringVar(&author, "author", "", "Document author")
 	cmd.Flags().StringVar(&summary, "summary", "", "Document summary")
+	cmd.Flags().StringVar(&publishedDate, "published-date", "", "Published date")
 	cmd.Flags().StringVar(&imageURL, "image-url", "", "Image URL")
 	cmd.Flags().StringVar(&location, "location", "", "Location (new|later|archive|feed)")
 	cmd.Flags().StringVar(&category, "category", "", "Category")

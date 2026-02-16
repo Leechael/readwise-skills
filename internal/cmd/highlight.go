@@ -84,14 +84,19 @@ func newHighlightGetCmd() *cobra.Command {
 
 func newHighlightCreateCmd() *cobra.Command {
 	var (
-		text       string
-		title      string
-		author     string
-		sourceURL  string
-		sourceType string
-		category   string
-		note       string
-		fromStdin  bool
+		text          string
+		title         string
+		author        string
+		imageURL      string
+		sourceURL     string
+		sourceType    string
+		category      string
+		note          string
+		location      int
+		locationType  string
+		highlightedAt string
+		highlightURL  string
+		fromStdin     bool
 	)
 
 	cmd := &cobra.Command{
@@ -114,18 +119,24 @@ func newHighlightCreateCmd() *cobra.Command {
 				if text == "" {
 					return fmt.Errorf("--text is required (or use --stdin)")
 				}
+				item := model.HighlightCreateItem{
+					Text:          text,
+					Title:         title,
+					Author:        author,
+					ImageURL:      imageURL,
+					SourceURL:     sourceURL,
+					SourceType:    sourceType,
+					Category:      category,
+					Note:          note,
+					LocationType:  locationType,
+					HighlightedAt: highlightedAt,
+					HighlightURL:  highlightURL,
+				}
+				if cmd.Flags().Changed("location") {
+					item.Location = &location
+				}
 				req = model.HighlightCreateRequest{
-					Highlights: []model.HighlightCreateItem{
-						{
-							Text:       text,
-							Title:      title,
-							Author:     author,
-							SourceURL:  sourceURL,
-							SourceType: sourceType,
-							Category:   category,
-							Note:       note,
-						},
-					},
+					Highlights: []model.HighlightCreateItem{item},
 				}
 			}
 
@@ -140,10 +151,15 @@ func newHighlightCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&text, "text", "", "Highlight text")
 	cmd.Flags().StringVar(&title, "title", "", "Source title")
 	cmd.Flags().StringVar(&author, "author", "", "Source author")
+	cmd.Flags().StringVar(&imageURL, "image-url", "", "Cover image URL")
 	cmd.Flags().StringVar(&sourceURL, "source-url", "", "Source URL")
 	cmd.Flags().StringVar(&sourceType, "source-type", "", "Source type")
 	cmd.Flags().StringVar(&category, "category", "", "Category (books|articles|tweets|podcasts)")
 	cmd.Flags().StringVar(&note, "note", "", "Note for the highlight")
+	cmd.Flags().IntVar(&location, "location", 0, "Position in source")
+	cmd.Flags().StringVar(&locationType, "location-type", "", "Location type (page|location|none|order|offset|time_offset)")
+	cmd.Flags().StringVar(&highlightedAt, "highlighted-at", "", "Highlight time (ISO 8601)")
+	cmd.Flags().StringVar(&highlightURL, "highlight-url", "", "Unique highlight URL")
 	cmd.Flags().BoolVar(&fromStdin, "stdin", false, "Read highlight JSON from stdin")
 
 	return cmd
