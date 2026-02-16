@@ -1,29 +1,57 @@
 name: Go CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [main]
+    branches: ["**"]
+  push:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  ci:
+  test-build:
     runs-on: ubuntu-latest
+    env:
+      GOFLAGS: -buildvcs=false
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+          cache: true
 
-      - name: Format check
-        run: test -z "$(gofmt -l .)"
+      - name: Download deps
+        run: go mod tidy
+
+      - name: Verify go.mod/go.sum unchanged
+        run: |
+          git diff --exit-code go.mod go.sum
+
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l ./cmd ./internal ./tests)
+          if [ -n "$unformatted" ]; then
+            echo "Unformatted files:"
+            echo "$unformatted"
+            exit 1
+          fi
 
       - name: Vet
         run: go vet ./...
 
-      - name: Test
-        run: go test ./... -count=1 -race
+      - name: Unit tests
+        run: go test ./... -count=1
+
+      - name: BDD tests
+        run: go test -tags=bdd ./tests/bdd/... -count=1
 
       - name: Build
-        run: go build -o bin/readwise-cli ./cmd/readwise
+        run: go build -v ./cmd/readwise
