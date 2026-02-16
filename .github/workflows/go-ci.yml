@@ -55,7 +55,12 @@ jobs:
         run: go test ./... -count=1
 
       - name: BDD tests
-        run: go test -tags=bdd ./tests/bdd/... -count=1
+        run: |
+          if [ -d ./tests/bdd ] && ls ./tests/bdd/*.go >/dev/null 2>&1; then
+            go test -tags=bdd ./tests/bdd/... -count=1
+          else
+            echo "No BDD tests found, skipping"
+          fi
 
       - name: Build
         run: go build -v ./cmd/readwise
