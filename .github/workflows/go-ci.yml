@@ -37,7 +37,11 @@ jobs:
 
       - name: Check formatting
         run: |
-          unformatted=$(gofmt -l ./cmd ./internal ./tests)
+          dirs=""
+          for d in ./cmd ./internal ./tests; do
+            [ -d "$d" ] && dirs="$dirs $d"
+          done
+          unformatted=$(gofmt -l $dirs)
           if [ -n "$unformatted" ]; then
             echo "Unformatted files:"
             echo "$unformatted"

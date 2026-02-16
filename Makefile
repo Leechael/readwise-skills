@@ -26,7 +26,7 @@ tidy:
 	go mod tidy
 
 fmt:
-	gofmt -w ./cmd ./internal ./tests
+	@for d in ./cmd ./internal ./tests; do [ -d "$$d" ] && gofmt -w "$$d"; done
 
 test:
 	go test ./... -count=1
@@ -35,7 +35,8 @@ bdd-test:
 	go test -tags=bdd ./tests/bdd/... -count=1
 
 ci:
-	@unformatted=$$(gofmt -l ./cmd ./internal ./tests); \
+	@dirs=""; for d in ./cmd ./internal ./tests; do [ -d "$$d" ] && dirs="$$dirs $$d"; done; \
+	unformatted=$$(gofmt -l $$dirs); \
 	if [ -n "$$unformatted" ]; then echo "Unformatted files:"; echo "$$unformatted"; exit 1; fi
 	go vet ./...
 	go test ./... -count=1
