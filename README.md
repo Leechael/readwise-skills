@@ -39,7 +39,7 @@ go build -o bin/readwise-cli ./cmd/readwise
 Set credentials via environment variable:
 
 ```bash
-export READWISE_TOKEN="<token>"
+export READWISE_API_TOKEN="<token>"
 ```
 
 Alternatively, pass `--token` on every invocation.
@@ -47,8 +47,8 @@ Alternatively, pass `--token` on every invocation.
 Validate setup before use:
 
 ```bash
-readwise-cli auth check
-readwise-cli auth check --json
+readwise-cli status
+readwise-cli status --json
 ```
 
 ---
@@ -57,7 +57,7 @@ readwise-cli auth check --json
 
 ### v2 — Highlights & Books
 
-- `auth check` — check credentials and API connectivity
+- `status` — check credentials and API connectivity
 - `highlight list` — list highlights with filters
 - `highlight get <id>` — get a single highlight
 - `highlight create` — create highlights (flags or stdin)
@@ -90,9 +90,9 @@ readwise-cli auth check --json
 ## Usage examples
 
 ```bash
-# auth
-readwise-cli auth check
-readwise-cli auth check --json
+# status
+readwise-cli status
+readwise-cli status --json
 
 # highlights
 readwise-cli highlight list --json
@@ -151,6 +151,6 @@ Use 1Password CLI to inject credentials at runtime:
 Example:
 
 ```bash
-op run --env-file=.env -- readwise-cli auth check
+op run --env-file=.env -- readwise-cli status
 op run --env-file=.env -- readwise-cli highlight list --json
 ```

@@ -40,12 +40,12 @@ func NewRootCmd() *cobra.Command {
 		SilenceErrors: true,
 	}
 
-	rootCmd.PersistentFlags().StringVar(&token, "token", "", "Readwise API token (or set READWISE_TOKEN)")
+	rootCmd.PersistentFlags().StringVar(&token, "token", "", "Readwise API token (or set READWISE_API_TOKEN)")
 	rootCmd.PersistentFlags().BoolVar(&jsonMode, "json", false, "Output as JSON")
 	rootCmd.PersistentFlags().BoolVar(&plainMode, "plain", false, "Output as plain tab-separated text")
 	rootCmd.PersistentFlags().StringVar(&jqFilter, "jq", "", "JQ filter (requires --json)")
 
-	rootCmd.AddCommand(newAuthCmd())
+	rootCmd.AddCommand(newStatusCmd())
 	rootCmd.AddCommand(newHighlightCmd())
 	rootCmd.AddCommand(newBookCmd())
 	rootCmd.AddCommand(newExportCmd())
@@ -58,10 +58,10 @@ func NewRootCmd() *cobra.Command {
 func getClient() (*client.Client, error) {
 	t := token
 	if t == "" {
-		t = os.Getenv("READWISE_TOKEN")
+		t = os.Getenv("READWISE_API_TOKEN")
 	}
 	if t == "" {
-		return nil, fmt.Errorf("no API token provided; set READWISE_TOKEN or use --token")
+		return nil, fmt.Errorf("no API token provided; set READWISE_API_TOKEN or use --token")
 	}
 	return client.New(t), nil
 }

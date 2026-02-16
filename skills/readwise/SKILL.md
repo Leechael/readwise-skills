@@ -1,7 +1,7 @@
 ---
 name: readwise
 description: Readwise and Reader operations via readwise-cli. Use this skill for highlight/book retrieval, tag management, daily review, full export, and Reader document save/list/update/delete with environment-injected credentials.
-compatibility: Requires readwise-cli in PATH and READWISE_TOKEN environment variable.
+compatibility: Requires readwise-cli in PATH and READWISE_API_TOKEN environment variable.
 ---
 
 # Readwise Skill
@@ -37,20 +37,20 @@ readwise-cli --help
 Required environment variable:
 
 ```bash
-export READWISE_TOKEN="<token>"
+export READWISE_API_TOKEN="<token>"
 ```
 
 Alternatively, pass `--token` on every invocation.
 
 ### 3) Verify login/config status before operations
 
-Use the built-in auth check command:
+Use the built-in status command:
 
 ```bash
-readwise-cli auth check
+readwise-cli status
 ```
 
-If credentials are missing or invalid, this command will fail with guidance. Do not continue with operations until `auth check` is successful.
+If credentials are missing or invalid, this command will fail with guidance. Do not continue with operations until `status` is successful.
 
 ## Recommended Credential Management (1Password CLI)
 
@@ -62,17 +62,17 @@ Reference:
 Example pattern:
 
 ```bash
-op run --env-file=.env -- readwise-cli auth check
+op run --env-file=.env -- readwise-cli status
 op run --env-file=.env -- readwise-cli highlight list --json
 ```
 
-(Your `.env` should define `READWISE_TOKEN` with a 1Password secret reference.)
+(Your `.env` should define `READWISE_API_TOKEN` with a 1Password secret reference.)
 
 ## Command Mapping
 
 ### v2 — Highlights & Books
 
-- Check auth: `readwise-cli auth check`
+- Check auth: `readwise-cli status`
 - List highlights: `readwise-cli highlight list`
 - Get highlight: `readwise-cli highlight get <id>`
 - Create highlights: `readwise-cli highlight create`
@@ -95,7 +95,7 @@ op run --env-file=.env -- readwise-cli highlight list --json
 
 ## Recommended Workflow
 
-1. Run `readwise-cli auth check` first.
+1. Run `readwise-cli status` first.
 2. Prefer read commands first: `highlight list`, `book list`, `reader list`.
 3. Use filters to narrow results: `--category`, `--book-id`, `--updated-after`.
 4. Pipe JSON output through `--jq` for scripting: `--json --jq '.results[]'`.
@@ -106,8 +106,8 @@ op run --env-file=.env -- readwise-cli highlight list --json
 ### 1) Check authentication
 
 ```bash
-readwise-cli auth check
-readwise-cli auth check --json
+readwise-cli status
+readwise-cli status --json
 ```
 
 ### 2) List and filter highlights
@@ -183,7 +183,7 @@ readwise-cli reader tag list --plain
 
 ## Error Handling Rules
 
-- Missing credentials: explicitly report missing `READWISE_TOKEN`.
+- Missing credentials: explicitly report missing `READWISE_API_TOKEN`.
 - API failures: include HTTP status code and response body.
 - Not found: clearly include the identifier that was requested.
 - Auth failures: exit code 2. Not found: exit code 3. General errors: exit code 1.
